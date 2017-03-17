@@ -1,0 +1,161 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AdventChallenges
+{
+    class Program
+    {
+        static string Input = "L2, L3, L3, L4, R1, R2, L3, R3, R3, L1, L3, R2, R3, L3, R4, R3, R3, L1, L4, R4, L2, R5, R1, L5, R1, R3, L5, R2, L2, R2, R1, L1, L3, L3, R4, R5, R4, L1, L189, L2, R2, L5, R5, R45, L3, R4, R77, L1, R1, R194, R2, L5, L3, L2, L1, R5, L3, L3, L5, L5, L5, R2, L1, L2, L3, R2, R5, R4, L2, R3, R5, L2, L2, R3, L3, L2, L1, L3, R5, R4, R3, R2, L1, R2, L5, R4, L5, L4, R4, L2, R5, L3, L2, R4, L1, L2, R2, R3, L2, L5, R1, R1, R3, R4, R1, R2, R4, R5, L3, L5, L3, L3, R5, R4, R1, L3, R1, L3, R3, R3, R3, L1, R3, R4, L5, L3, L1, L5, L4, R4, R1, L4, R3, R3, R5, R4, R3, R3, L1, L2, R1, L4, L4, L3, L4, L3, L5, R2, R4, L2,";
+        static int Angle = 0;
+        static int X = 0;
+        static int Y = 0;
+        static StringBuilder tempString = new StringBuilder();
+        static List<Coordinate> locationList = new List<Coordinate>();
+        static bool firstIntersectionFound = false;
+
+
+        static void Main()
+        {
+            var inputCharArray = Input.ToCharArray();
+            
+
+            for (int i = 0; i < inputCharArray.Count(); i++)
+            {
+                if (inputCharArray[i] != ' ') {
+                    if (inputCharArray[i] == 'R')
+                    {
+                        Angle = Normalize(Angle += 90);
+                    }
+                    else if (inputCharArray[i] == 'L')
+                    {
+                        Angle = Normalize(Angle -= 90);
+                    }
+                    else if (inputCharArray[i] == ',')
+                    {
+                        int distance;
+                        int.TryParse(tempString.ToString(), out distance);
+                        AddDistance(Angle, distance);
+                        tempString.Remove(0, tempString.Length);
+                    }
+                    else
+                    {                       
+                        tempString.Append(inputCharArray[i]);
+                    }
+                }
+
+            }
+
+
+            Console.WriteLine("(" + X + "," + Y + ") Are the Co-ordinates, the base is " + (Math.Abs(X) + Math.Abs(Y)) + " Blocks Away");
+
+                      
+            Console.ReadKey();
+
+        }
+
+        public class Coordinate{
+            public int x { get; set; }
+            public int y { get; set; }
+
+            public override bool Equals(object obj)
+            {
+                if (obj == null) return false;
+                Coordinate objAsCoord = obj as Coordinate;
+                if (objAsCoord == null) return false;
+                else return Equals(objAsCoord);
+            }
+
+            public bool Equals(Coordinate other)
+            {
+                if (other == null)
+                    return false;
+                return (x == other.x && y == other.y);
+            }
+        }
+
+
+        public static int Normalize(int value)
+        {
+            if (value >= 360)
+                return value - 360;
+            if (value < 0)
+                return value + 360;
+            else
+                return value;
+        }
+
+        public static void AddDistance(int angle, int distance)
+        {
+            if (angle == 90)
+            {
+                if (!firstIntersectionFound)
+                {
+                    for (int i = 1; i <= distance; i++)
+                    {
+                        if (locationList.Contains(new Coordinate { x = X + i, y = Y }))
+                        {
+                            Console.WriteLine("Found first intersection at (" + (X + i) + "," + Y + "), Which is " + (Math.Abs(X + i) + Math.Abs(Y)) + " blocks away");
+                            firstIntersectionFound = true;
+                        }
+                        locationList.Add(new Coordinate { x = X + i, y = Y });
+                    }
+                }
+                X += distance;
+            }
+            else if (angle == 180)
+            {
+                if (!firstIntersectionFound)
+                {
+                    for (int i = 1; i <= distance; i++)
+                    {
+                        if (locationList.Contains(new Coordinate { x = X, y = Y - i }))
+                        {
+                            Console.WriteLine("Found first intersection at (" + X + "," + (Y - i) + "), Which is " + (Math.Abs(X) + Math.Abs(Y - i)) + " blocks away");
+                            firstIntersectionFound = true;
+                        }
+                        locationList.Add(new Coordinate { x = X, y = Y - i });
+                    }
+                }
+                Y -= distance;
+            }
+            else if (angle == 270)
+            {
+                if (!firstIntersectionFound)
+                {
+                    for (int i = 1; i <= distance; i++)
+                    {
+                        if (locationList.Contains(new Coordinate { x = X - i, y = Y }))
+                        {
+                            Console.WriteLine("Found first intersection at (" + (X - i) + "," + Y + "), Which is " + (Math.Abs(X - i) + Math.Abs(Y)) + " blocks away");
+                            firstIntersectionFound = true;
+                        }
+                        locationList.Add(new Coordinate { x = X - i, y = Y });
+                    }
+                }
+                X -= distance;
+            }
+            else if (angle == 0)
+            {
+                if (!firstIntersectionFound)
+                {
+                    for (int i = 1; i <= distance; i++)
+                    {
+                        if (locationList.Contains(new Coordinate { x = X, y = Y + i }))
+                        {
+                            Console.WriteLine("Found first intersection at (" + X + "," + (Y + i) + "), Which is " + (Math.Abs(X) + Math.Abs(Y + i)) + " blocks away");
+                            firstIntersectionFound = true;
+                        }
+                        locationList.Add(new Coordinate { x = X, y = Y + i });
+                    }
+                }
+                Y += distance;
+            }
+
+
+        }
+
+    }
+}
