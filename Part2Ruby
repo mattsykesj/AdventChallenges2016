@@ -1,0 +1,163 @@
+class Keypad
+  attr_accessor :key1, :key2, :key3, :key4, :key5, :key6, :key7, :key8, :key9, :currentKey
+  def initialize
+    #Part 1
+    @key1 = Key.new("1")
+    @key2 = Key.new("2")
+    @key3 = Key.new("3")
+    @key4 = Key.new("4")
+    @key5 = Key.new("5")
+    @key6 = Key.new("6")
+    @key7 = Key.new("7")
+    @key8 = Key.new("8")
+    @key9 = Key.new("9")
+    #Part 2
+    @keyA = Key.new("A")
+    @keyB = Key.new("B")
+    @keyC = Key.new("C")
+    @keyD = Key.new("D")
+    @currentKey = @key5
+  end
+  
+  #Part 1
+  def mapKeys
+    @key1.up = nil,   @key1.right = @key2, @key1.down = @key4, @key1.left = nil,
+    @key2.up = nil,   @key2.right = @key3, @key2.down = @key5, @key2.left = @key1,
+    @key3.up = nil,   @key3.right = nil,   @key3.down = @key6, @key3.left = @key2,
+    @key4.up = @key1, @key4.right = @key5, @key4.down = @key7, @key4.left = nil,
+    @key5.up = @key2, @key5.right = @key6, @key5.down = @key8, @key5.left = @key4,
+    @key6.up = @key3, @key6.right = nil,   @key6.down = @key9, @key6.left = @key5,
+    @key7.up = @key4, @key7.right = @key8, @key7.down = nil,   @key7.left = nil,
+    @key8.up = @key5, @key8.right = @key9, @key8.down = nil,   @key8.left = @key7,
+    @key9.up = @key6, @key9.right = nil,   @key9.down = nil,   @key9.left = @key8
+  end
+  
+  #Part 2
+  def mapKeys2
+    @key1.up = nil,   @key1.right = nil,   @key1.down = @key3, @key1.left = nil,
+    @key2.up = nil,   @key2.right = @key3, @key2.down = @key6, @key2.left = nil,
+    @key3.up = @key1, @key3.right = @key4, @key3.down = @key7, @key3.left = @key2,
+    @key4.up = nil,   @key4.right = nil,   @key4.down = @key8, @key4.left = @key3,
+    @key5.up = nil,   @key5.right = @key6, @key5.down = nil,   @key5.left = nil,
+    @key6.up = @key2, @key6.right = @key7, @key6.down = @keyA, @key6.left = @key5,
+    @key7.up = @key3, @key7.right = @key8, @key7.down = @keyB, @key7.left = @key6,
+    @key8.up = @key4, @key8.right = @key9, @key8.down = @keyC, @key8.left = @key7,
+    @key9.up = nil,   @key9.right = nil,   @key9.down = nil,   @key9.left = @key8,
+    @keyA.up = @key6, @keyA.right = @keyB, @keyA.down = nil,   @keyA.left = nil,
+    @keyB.up = @key7, @keyB.right = @keyC, @keyB.down = @keyD, @keyB.left = @keyA,
+    @keyC.up = @key8, @keyC.right = nil,   @keyC.down = nil,   @keyC.left = @keyB,
+    @keyD.up = @keyB, @keyD.right = nil,   @keyD.down = nil,   @keyD.left = nil
+  end
+end
+
+
+class Key
+  attr_writer :up, :right, :left, :down
+  attr_accessor :name
+  
+  def initialize(name)
+    @name = name
+    @up = nil
+    @right = nil
+    @down = nil
+    @left = nil
+  end
+  
+  def right
+    if @right != nil
+      @right
+    else
+      self
+    end
+  end
+  
+  def up
+    if @up != nil
+      @up
+    else
+      self
+    end
+  end
+  
+  def down
+    if @down != nil
+      @down
+    else
+      self
+    end
+  end
+  
+  def left
+    if @left != nil
+      @left
+    else
+      self
+    end
+  end
+end
+
+
+input = "RLRDDRLLDLRLUDDULLDRUUULDDLRLUDDDLDRRDUDDDLLURDDDLDDDRDURUDRDRRULUUDUDDRRRLRRRRRLRULRLLRULDRUUDRLRRURDDRLRULDLDULLLRULURRUULLRLLDDDDLLDURRUDLDLURDRDRDLUUUDDRDUUDDULLUURRDRLDDULURRRUDLLULULDLLURURUDRRRRUDRLRDLRRLDDRDDLULDLLLURURDUDRRRRUULURLRDULDRLUDRRUDDUULDURUDLDDURRRDLULLUUDRLLDUUDLDRUDDRLLLLLLDUDUDDLRDLRRDRUDDRRRLLRRDLLRLDDURUURRRDDLDUULLDLDLRURDLLLDDRUUDRUDDDDULRLLDUULRUULLLULURRRLLULDLDUDLDLURUDUDULLDLLUUDRRDRLUURURURURDLURUUDLDRLUDDUUDULDULULLLDLDDULLULLDULRRDRULLURRRULLDDDULULURLRDURLLURUDDULLRUDLRURURRDRDUULDRUUDURDURDDLRDUUULDUUDRDURURDRRRURLLDDLLLURURULULUDLRDLDRDRURLRLULRDLU
+UDLDURRULDRDDLDUULUDLDUULUURDDRUDRURRRUDRURLLDDRURLDLRDUUURDLLULURDDUDDDRRRURLLDLDLULRDULRLULDLUUDLLRLDLRUUULDDUURDLDDRRDLURLDUDDRURDRRURDURRRLUULURDDLRDLDRRRLDUDRLRLLRLDDUULDURUUULLLRRRRRRRDRRRDRLUULDLDDLULDRDUDLLUDRRUDRUUDULRLUURDDDDRRUUDLURULLLURDULUURDRDDURULRUDRRDLRDUUUUUDDDRDRDDRUDRDDDRLRUUDRDRDDDLUDRDRLDRDDRULURDRLDRUDUDRUULRLLUDRDRLLLLDUDRRLLURDLLLDRRUDDUDRLRLDUDRLURRUUULURDDRUURRLDRLRRRUUDLULDDDRDLDUUURLLUULDDRRUDLDDRUDUDUURURDDRDULLLLLULRRRDLRRRDDDLURDDDDLUULLLRDDURRRRLURRLDDLRUULULRDRDDDDLDUUUUUUDRRULUUUDD
+UURDRRUDLURRDDDLUDLRDURUDURDLLLLRDLRLRDDRDRDUUULRDLLDLULULRDUDDRRUUDURULDLUDLRDRUDLDDULLLDDRDLLDULLLURLLRDDLDRDULRRDDULRDURLLRUDRLRRLUDURLDRDLDLRLLLURLRRURDLDURDLUDULRDULLLDRDDRDLDRDULUULURDRRRLDRRUULULLDDRRLDLRUURLRUURLURRLLULUUULRLLDDUDDLRLDUURURUDLRDLURRLLURUDLDLLUDDUULUUUDDDURDLRRDDDLDRUDRLRURUUDULDDLUUDDULLDDRRDDRRRUDUDUDLDLURLDRDLLLLDURDURLRLLLUUDLRRRRUDUDDLDLRUURRLRRLUURRLUDUDRRRRRRRLDUDDRUDDLUDLRDDDRLDUULDRDRRDLDRURDLDRULRLRLUDRDLRRUURUUUUDLDUUULLLRRRRRDLRRURDDLLLLUULDLLRULLUDLLDLLUDLRLRRLRURDDRRL
+URDRDLLRDDDLLLDDLURLRURUURRRLUURURDURRLLUDURRLRLDLUURDLULRRDRUDDLULDLDRLDLRLRRLLLDDDUDDDLRURURRLLDRRRURUDLRDDLLDULDDLDRLUUUDRRRULDUULRDDDLRRLLURDDURLULRDUDURRLLDLLRLDUDDRRDDLRLLLDUDRLUURRLLDULRLDLUUUUUDULUDLULUDDUURRURLDLDRRLDLRRUDUDRRDLDUDDLULLDLLRDRURDRDRRLDDDDRDDRLLDDDLLUDRURLURDRRRRRUDDDUDUDDRDUUDRRUDUDRLULDDURULUURUUUURDRULRLRULLDDRRRUULRRRRURUDLDLRDLLDRLURLRUULLURDUDULRRURLRLLRRLLLURULRRRLDDUULLUUULRRDRULUUUUDRDRRDLRURLRLLRLRRRDRDRLDLUURUURULLDLULRRLRRDRULRRLLLDDURULLDLDLDLUUURDLDLUUDULRLLUDDRRDLLDLDLDURLUURRDDRRURDRLUDRLUUUDLDULDLUDRLDUDDLLRUDULLLLLDRRLLUULLUUURRDDUURDLLRDDLRLLU
+LDUDRRDLUUDDRLLUUULURLDUDLUDLRLDRURLULRLLDDLRRUUUDDDDRDULDDUUDLRUULDRULLRDRUDDURLDUUURRUDUDRDRDURRDLURRRDRLDLRRRLLLRLURUURRDLLRDLDDLLRDUDDRDUULRULRRURLUDDUDDDUULLUURDULDULLLLRUUUDDRRRLDDDLDLRRDRDRDLUULRLULDRULDLRDRRUDULUDLLUDUULRDLRRUUDDLLDUDDRULURRLULDLDRRULDDRUUDDLURDLRDRLULRRLURRULDUURDLUDLLDRLDULLULDLLRDRDLLLUDLRULLRLDRDDDLDDDLRULDLULLRUUURRLLDUURRLRLDUUULDUURDURRULULRUUURULLLRULLURDDLDRLLRDULLUDLDRRRLLLLDUULRRLDURDURDULULDUURLDUDRLRURRDLUUULURRUDRUUUDRUR"
+
+inputScanned = input.split("\n")
+
+#Part 1
+keycode = ""
+keypad = Keypad.new
+keypad.mapKeys
+keypad.key1.up = nil #Not sure why but key1.up wasnt mapping to nil in the mapKeys function
+                      
+inputScanned.each do |string|
+  string.each_char do |char|
+    case char
+      when "U"
+        keypad.currentKey = keypad.currentKey.up
+      when "D"
+        keypad.currentKey = keypad.currentKey.down
+      when "R"
+        keypad.currentKey = keypad.currentKey.right
+      when "L"
+        keypad.currentKey = keypad.currentKey.left
+      end
+  end
+  keycode << keypad.currentKey.name
+end
+
+puts keycode
+
+#Part 2
+keycode2 = ""
+keypad2 = Keypad.new
+keypad2.mapKeys2
+keypad2.key1.up = nil #Not sure why but key1.up wasnt mapping to nil in the mapKeys function
+
+inputScanned.each do |string|
+  string.each_char do |char|
+    case char
+      when "U"
+        keypad2.currentKey = keypad2.currentKey.up
+      when "D"
+        keypad2.currentKey = keypad2.currentKey.down
+      when "R"
+        keypad2.currentKey = keypad2.currentKey.right
+      when "L"
+        keypad2.currentKey = keypad2.currentKey.left
+      end
+  end
+   keycode2 << keypad2.currentKey.name
+end
+
+puts keycode2
+
+
+
+
+
+
+
+
+
