@@ -1,0 +1,45 @@
+class CharCountPair
+  attr_accessor :char, :count
+  def initialize(char, count)
+    @char = char
+    @count = count
+  end
+end
+
+class RoomValidator
+  @@sum = 0
+  
+  def self.sum
+    @@sum
+  end
+  
+  def self.sum=(value)
+    @@sum = value
+  end
+  
+  def self.validate(string)
+    stringSplit = string.split("-")
+    
+    @name = stringSplit.take(stringSplit.size - 1)
+    @sectorId = string.scan(/[0-9]+/)[0].to_i
+    @checksum = string.scan(/[a-z]+/).last
+    
+    charCountPairArray = []
+
+    @name.each do |string|
+      charCountPairArray << CharCountPair.new(string[0], string.length)
+    end
+
+    charCountPairArray.sort_by! {|x| [-x.count, x.char]}
+    a = 0
+    @checksum.each_char do |c|
+      if c == charCountPairArray[a].char
+        puts c
+        a += 1
+      end
+    end
+  end
+end
+
+RoomValidator.validate("aaaaa-bbb-z-y-x-123[abxyz]")
+
