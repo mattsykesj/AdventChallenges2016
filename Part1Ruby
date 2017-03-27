@@ -1,6 +1,8 @@
+require 'mathn'
+
 class Coordinate
-  attr_accessor :x
-  attr_accessor :y
+
+  attr_reader :x, :y
   attr_accessor :previous
   
   def initialize(x = 0, y = 0)
@@ -12,20 +14,20 @@ class Coordinate
   
   def ==(other)
     if @x == other.x && @y == other.y
-      return true
+       true
     else
-      return false
+       false
     end
   end
   
-  def totalBlocks
-    return @x.abs + y.abs
+  def total_blocks
+     @x.abs + y.abs
   end
   
-  def intersectCheck(inputCoord)
-    if !@intersected
-      if @previous.include? inputCoord
-        puts "First Intersect Total Blocks: #{totalBlocks}"
+  def intersect_check(input_coord)
+    unless @intersected
+      if @previous.include? input_coord
+        puts "First Intersect Total Blocks: #{total_blocks}"
         @intersected = true
       end
     end
@@ -35,75 +37,62 @@ class Coordinate
     case angle
     when 0
       distance.times do
-        coord = Coordinate.new(@x, @y += 1)
-        intersectCheck(coord)
-        @previous.push(coord)
+        check_push_coord(@x, @y += 1)
       end
     when 90
       distance.times do
-        coord = Coordinate.new(@x += 1, @y)
-        intersectCheck(coord)
-        @previous.push(coord)
+        check_push_coord(@x += 1, @y)
       end
     when 180
       distance.times do
-        coord = Coordinate.new(@x, @y -= 1)
-        intersectCheck(coord)
-        @previous.push(coord)
+        check_push_coord(@x, @y -= 1)
       end
     when 270
       distance.times do
-        coord = Coordinate.new(@x -=1 , @y)
-        intersectCheck(coord)
-        @previous.push(coord)
+        check_push_coord(@x -=1 , @y)
       end
     end
+  end
+
+  def check_push_coord(x, y)
+    coord = Coordinate.new(x , y)
+    intersect_check(coord)
+    @previous.push(coord)
   end
 end
 
 class Angle
-  def initialize(currentAngle = 0)
-    @currentAngle = currentAngle
+  def initialize(angle = 0)
+    @angle = angle
   end
   
-  def set(angleToAdd = 0)
-    @currentAngle = NormalizeAngle(@currentAngle += angleToAdd)
+  def set(angle_to_add = 0)
+    @angle = (@angle += angle_to_add).modulo(360)
   end
   
   def get
-    return @currentAngle
-  end
-  
-  def NormalizeAngle(angle = 0)
-    if angle >= 360 
-      return angle - 360
-    end
-    else if angle < 0
-      return angle + 360
-    else
-      return angle
-    end
+    @angle
   end
 end
+
+current_position = Coordinate.new(0,0)
+current_angle = Angle.new(0)
 
 input = "R2, L3, R2, R4, L2, L1, R2, R4, R1, L4, L5, R5, R5, R2, R2, R1, L2, L3, L2, L1, R3, L5, R187, R1, R4, L1, R5, L3, L4, R50, L4, R2, R70, L3, L2, R4, R3, R194, L3, L4, L4, L3, L4, R4, R5, L1, L5, L4, R1, L2, R4, L5, L3, R4, L5, L5, R5, R3, R5, L2, L4, R4, L1, R3, R1, L1, L2, R2, R2, L3, R3, R2, R5, R2, R5, L3, R2, L5, R1, R2, R2, L4, L5, L1, L4, R4, R3, R1, R2, L1, L2, R4, R5, L2, R3, L4, L5, L5, L4, R4, L2, R1, R1, L2, L3, L2, R2, L4, R3, R2, L1, L3, L2, L4, L4, R2, L3, L3, R2, L4, L3, R4, R3, L2, L1, L4, R4, R2, L4, L4, L5, L1, R2, L5, L2, L3, R2, L2"
 
-currentPosition = Coordinate.new(0,0)
-currentAngle = Angle.new(0)
+input = input.split(",")
 
-inputScanned = input.scan(/[RL][0-9]+/)
-
-inputScanned.each do |dir|
+input.each do |dir|
   if dir.include? "R"
-    currentAngle.set(90)
-    number = dir.delete("R").to_i
-    currentPosition.update(currentAngle.get, number)
+    current_angle.set(90)
+    number = dir.match(/[0-9]+/)[0].to_i
+    current_position.update(current_angle.get, number)
   else dir.include? "L"
-    currentAngle.set(-90)
-    number = dir.delete("L").to_i
-    currentPosition.update(currentAngle.get, number)
+    current_angle.set(-90)
+    number = dir.match(/[0-9]+/)[0].to_i
+    current_position.update(current_angle.get, number)
   end
 end
 
-puts "Total blocks: #{currentPosition.totalBlocks}"
+puts "Total blocks: #{current_position.total_blocks}"
 
